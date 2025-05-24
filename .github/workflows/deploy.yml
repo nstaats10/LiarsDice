@@ -9,9 +9,10 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
       pages: write
       id-token: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v3
       
@@ -28,9 +29,4 @@ jobs:
         run: npm run build
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
-          target_branch: main
+        uses: actions/deploy-pages@v4
