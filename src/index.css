@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-parchment: #e6d2a8;
+    --color-wood-dark: #5d4037;
+    --color-wood-medium: #8b4513;
+    --color-wood-light: #a1887f;
+    --color-gold: #ffd700;
+    --color-navy: #1a2a3a;
+    --color-red: #a83232;
+  }
+
+  @font-face {
+    font-family: 'PirateFont';
+    src: url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+  }
+  
+  body {
+    @apply bg-cover bg-center bg-fixed;
+    background-image: url('https://images.pexels.com/photos/2486168/pexels-photo-2486168.jpeg?auto=compress&cs=tinysrgb&w=1920');
+    font-family: 'Georgia', serif;
+  }
+  
+  h1, h2, h3 {
+    font-family: 'PirateFont', 'Georgia', serif;
+  }
+}
+
+@layer components {
+  .wooden-btn {
+    @apply bg-[#8b4513] text-[#e6d2a8] border-2 border-[#5d4037] rounded-md px-4 py-2 
+           shadow-md transform transition-all duration-150
+           bg-[url('https://images.pexels.com/photos/172292/pexels-photo-172292.jpeg?auto=compress&cs=tinysrgb&w=400')] bg-cover
+           hover:shadow-lg hover:brightness-110
+           active:translate-y-1 active:shadow-sm active:brightness-90
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none;
+  }
+
+  .dice {
+    @apply w-12 h-12 rounded-lg shadow-md flex items-center justify-center text-center 
+           font-bold text-2xl bg-[#f5ecd9] border-2 border-[#8b4513] mx-1
+           bg-[url('https://images.pexels.com/photos/129733/pexels-photo-129733.jpeg?auto=compress&cs=tinysrgb&w=400')] bg-cover;
+  }
+
+  .dice-container {
+    @apply flex flex-wrap justify-center gap-2 my-4;
+  }
+
+  .game-panel {
+    @apply bg-[#e6d2a8] bg-opacity-90 rounded-xl border-4 border-[#8b4513] shadow-2xl p-4 m-2
+           bg-[url('https://images.pexels.com/photos/5477830/pexels-photo-5477830.jpeg?auto=compress&cs=tinysrgb&w=400')] bg-cover
+           backdrop-blur-sm;
+  }
+  
+  .log-text {
+    @apply font-medium text-[#5d4037] mt-1 px-3 py-1 rounded
+           bg-[#e6d2a8] bg-opacity-80;
+  }
+}
