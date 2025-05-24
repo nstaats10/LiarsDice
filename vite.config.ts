@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: process.env.NODE_ENV === 'production' ? '/LiarsDice/' : '/',
+  server: {
+    port: 3000,
+    open: true
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -21,6 +25,6 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+    exclude: ['lucide-react']
+  }
 });
