@@ -311,6 +311,6 @@ const handleBluffCalled = (caller: 'player' | 'ai') => {
       </div>
     </div>
   </div>
-);
-
+ );
+};
 export default GameBoard;
