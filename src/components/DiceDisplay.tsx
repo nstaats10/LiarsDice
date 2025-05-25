@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 interface DiceDisplayProps {
   dice: number[];
   isHidden: boolean;
-  diceToRemove?: number; // Add this prop
-  onDiceRemoved?: (newDice: number[]) => void; // Add this prop
+  diceToRemove?: number; // Index of dice to remove
+  onDiceRemoved?: (newDice: number[]) => void;
 }
 
-const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
+const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden, diceToRemove, onDiceRemoved }) => {
   const diceVariants = {
     hidden: { 
       opacity: 0, 
@@ -35,7 +35,15 @@ const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
         duration: 1,
         ease: "easeInOut"
       }
-    })
+    }),
+    remove: {
+      scale: 0,
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
   };
 
   const renderDiceFace = (value: number) => {
@@ -79,6 +87,16 @@ const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
     );
   };
 
+  // Handle dice removal
+  React.useEffect(() => {
+    if (diceToRemove !== undefined) {
+      const newDice = dice.filter((_, index) => index !== diceToRemove);
+      if (onDiceRemoved) {
+        onDiceRemoved(newDice);
+      }
+    }
+  }, [diceToRemove, onDiceRemoved]);
+
   return (
     <div className="dice-container flex gap-4 justify-center p-4">
       {dice.map((value, index) => (
@@ -87,7 +105,7 @@ const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
           className="dice relative w-16 h-16 rounded-lg border-4 border-[#1a2a3a] bg-[#1a2a3a] flex items-center justify-center"
           custom={index}
           initial="hidden"
-          animate={"visible"}
+          animate={diceToRemove === index ? "remove" : "visible"}
           whileHover={{ 
             scale: 1.1,
             boxShadow: "0 0 20px rgba(255, 215, 0, 0.5)"
@@ -100,7 +118,7 @@ const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
         >
           <motion.div 
             variants={diceVariants} 
-            animate="roll" 
+            animate={diceToRemove === index ? "remove" : "roll"} 
             className="w-full h-full"
           >
             {renderDiceFace(value)}
