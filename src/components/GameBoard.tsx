@@ -265,57 +265,52 @@ const handleBluffCalled = (caller: 'player' | 'ai') => {
   }, []);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 justify-center">
-      <div className="game-panel lg:w-3/4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-1/2">
-            <h2 className="text-2xl text-[#5d4037] font-bold">Your Dice</h2>
-            <DiceDisplay 
-              dice={gameState.playerDice} 
-              isHidden={false}
-              diceToRemove={gameState.lastBidder === 'player' ? 0 : undefined}
-              onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, playerDice: newDice }))}
-            />
-          </div>
-          
-          <div className="w-full md:w-1/2">
-            <h2 className="text-2xl text-[#5d4037] font-bold">AI's Dice</h2>
-            <DiceDisplay 
-              dice={gameState.aiDice} 
-              isHidden={true}
-              diceToRemove={gameState.lastBidder === 'ai' ? 0 : undefined}
-              onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, aiDice: newDice }))}
-            />
-          </div>
+  <div className="flex flex-col lg:flex-row gap-4 justify-center">
+    <div className="game-panel lg:w-3/4">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="w-full md:w-1/2">
+          <h2 className="text-2xl text-[#5d4037] font-bold">Your Dice</h2>
+          <DiceDisplay 
+            dice={gameState.playerDice} 
+            isHidden={false}
+            diceToRemove={gameState.lastBidder === 'player' ? 0 : undefined}
+            onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, playerDice: newDice }))}
+          />
         </div>
-        
-        <GameLog messages={gameState.gameLog} />
-        
-        <div className="text-xl font-bold mt-3 text-[#5d4037] border-t-2 border-[#8b4513] pt-2">
-          You: {gameState.playerDiceCount} dice | AI: {gameState.aiDiceCount} dice
-        </div>
-        
-        <GameControls 
-          onMakeBid={handlePlayerBid}
-          onCallBluff={handlePlayerCallBluff}
-          onNewGame={handleNewGame}
-          currentBid={gameState.currentBid}
-          isGameOver={gameState.gameOver}
-          lastBidder={gameState.lastBidder}
-        />
-      </div>
-      
-      <div className="lg:w-1/4">
-        <AdBanner position="sidebar" />
-        <div className="game-panel mt-4">
-          <PlayerStats 
-            wins={localStorage.getItem('playerWins') || '0'} 
-            losses={localStorage.getItem('playerLosses') || '0'} 
-            roundsPlayed={gameState.roundCount} 
+        <div className="w-full md:w-1/2">
+          <h2 className="text-2xl text-[#5d4037] font-bold">AI's Dice</h2>
+          <DiceDisplay 
+            dice={gameState.aiDice} 
+            isHidden={true}
+            diceToRemove={gameState.lastBidder === 'ai' ? 0 : undefined}
+            onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, aiDice: newDice }))}
           />
         </div>
       </div>
+      <GameLog messages={gameState.gameLog} />
+      <div className="text-xl font-bold mt-3 text-[#5d4037] border-t-2 border-[#8b4513] pt-2">
+        You: {gameState.playerDiceCount} dice | AI: {gameState.aiDiceCount} dice
+      </div>
+      <GameControls 
+        onMakeBid={handlePlayerBid}
+        onCallBluff={handlePlayerCallBluff}
+        onNewGame={handleNewGame}
+        currentBid={gameState.currentBid}
+        isGameOver={gameState.gameOver}
+        lastBidder={gameState.lastBidder}
+      />
     </div>
-  );
+    <div className="lg:w-1/4">
+      <AdBanner position="sidebar" />
+      <div className="game-panel mt-4">
+        <PlayerStats 
+          wins={localStorage.getItem('playerWins') || '0'} 
+          losses={localStorage.getItem('playerLosses') || '0'} 
+          roundsPlayed={gameState.roundCount} 
+        />
+      </div>
+    </div>
+  </div>
+);
 
 export default GameBoard;
