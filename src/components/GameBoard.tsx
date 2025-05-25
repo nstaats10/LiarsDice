@@ -264,7 +264,7 @@ const handleBluffCalled = (caller: 'player' | 'ai') => {
     initGame();
   }, []);
 
-   return (
+  return (
     <div className="flex flex-col lg:flex-row gap-4 justify-center">
       <div className="game-panel lg:w-3/4">
         <div className="flex flex-col md:flex-row gap-4">
