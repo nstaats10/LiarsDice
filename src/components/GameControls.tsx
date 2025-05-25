@@ -13,6 +13,10 @@ interface GameControlsProps {
   currentBid: Bid | null;
   isGameOver: boolean;
   lastBidder: 'player' | 'ai' | null;
+  playerDice: number[];
+  aiDice: number[];
+  onPlayerLoseDice: () => void;
+  onAILoseDice: () => void;
 }
 
 const GameControls: React.FC<GameControlsProps> = ({ 
@@ -21,7 +25,11 @@ const GameControls: React.FC<GameControlsProps> = ({
   onNewGame,
   currentBid, 
   isGameOver,
-  lastBidder
+  lastBidder,
+  playerDice,
+  aiDice,
+  onPlayerLoseDice,
+  onAILoseDice
 }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [value, setValue] = useState<number>(1);
@@ -43,9 +51,15 @@ const GameControls: React.FC<GameControlsProps> = ({
     onMakeBid(quantity, value);
   };
 
-  const handleCallBluff = () => {
+const handleCallBluff = () => {
     playSound('buttonClick');
     onCallBluff();
+    // Add dice removal logic
+    if (lastBidder === 'player') {
+      onPlayerLoseDice();
+    } else {
+      onAILoseDice();
+    }
   };
 
   // Suggestions for valid bids based on current bid
