@@ -242,7 +242,7 @@ const handleBluffCalled = (caller: 'player' | 'ai') => {
     // Chain animations
     animateDiceRemoval();
     startNextRound();
-  };
+  ;
 
   // Start a new game
   const handleNewGame = () => {
