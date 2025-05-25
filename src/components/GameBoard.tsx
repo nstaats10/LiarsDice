@@ -166,59 +166,69 @@ const GameBoard: React.FC = () => {
 
   // Handle bluff being called by either player or AI
 const handleBluffCalled = (caller: 'player' | 'ai') => {
-    if (!gameState.currentBid) return;
+  if (!gameState.currentBid) return;
+  
+  const { playerDice, aiDice, currentBid } = gameState;
+  const allDice = [...playerDice, ...aiDice];
+  const result = evaluateBid(allDice, currentBid);
+  
+  let newPlayerDiceCount = gameState.playerDiceCount;
+  let newAiDiceCount = gameState.aiDiceCount;
+  
+  let logMessage = '';
+  let loser = '';
+  
+  if (caller === 'player') {
+    logMessage = `You called bluff on AI's bid of ${currentBid.quantity} ${currentBid.value}'s.`;
     
-    const { playerDice, aiDice, currentBid } = gameState;
-    const allDice = [...playerDice, ...aiDice];
-    const result = evaluateBid(allDice, currentBid);
-    
-    let newPlayerDiceCount = gameState.playerDiceCount;
-    let newAiDiceCount = gameState.aiDiceCount;
-    
-    let logMessage = '';
-    let loser = '';
-    
-    if (caller === 'player') {
-      logMessage = `You called bluff on AI's bid of ${currentBid.quantity} ${currentBid.value}'s.`;
-      
-      if (result.bidSucceeded) {
-        logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. You lose a die!`;
-        newPlayerDiceCount--;
-        loser = 'player';
-        playSound('lose');
-      } else {
-        logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. AI loses a die!`;
-        newAiDiceCount--;
-        loser = 'ai';
-        playSound('win');
-      }
+    if (result.bidSucceeded) {
+      logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. You lose a die!`;
+      newPlayerDiceCount--;
+      loser = 'player';
+      playSound('lose');
     } else {
-      logMessage = `AI called bluff on your bid of ${currentBid.quantity} ${currentBid.value}'s.`;
-      
-      if (result.bidSucceeded) {
-        logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. AI loses a die!`;
-        newAiDiceCount--;
-        loser = 'ai';
-        playSound('win');
-      } else {
-        logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. You lose a die!`;
-        newPlayerDiceCount--;
-        loser = 'player';
-        playSound('lose');
-      }
+      logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. AI loses a die!`;
+      newAiDiceCount--;
+      loser = 'ai';
+      playSound('win');
     }
+  } else {
+    logMessage = `AI called bluff on your bid of ${currentBid.quantity} ${currentBid.value}'s.`;
+    
+    if (result.bidSucceeded) {
+      logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. AI loses a die!`;
+      newAiDiceCount--;
+      loser = 'ai';
+      playSound('win');
+    } else {
+      logMessage += ` There were actually ${result.actualCount} ${currentBid.value}'s. You lose a die!`;
+      newPlayerDiceCount--;
+      loser = 'player';
+      playSound('lose');
+    }
+  }
 
+  // Update game state with new dice counts and trigger animation
+  setGameState(prev => ({
+    ...prev,
+    playerDiceCount: newPlayerDiceCount,
+    aiDiceCount: newAiDiceCount,
+    gameLog: [...prev.gameLog, logMessage],
+    currentBid: null,
+    lastBidder: null,
+    // This will trigger the animation in DiceDisplay
+    lastBidder: loser
+  }));
+
+  // Wait for animation to complete before starting new round
+  setTimeout(() => {
     setGameState(prev => ({
       ...prev,
-      playerDiceCount: newPlayerDiceCount,
-      aiDiceCount: newAiDiceCount,
-      gameLog: [...prev.gameLog, logMessage],
-      currentBid: null,
-      lastBidder: null
+      lastBidder: null // Reset lastBidder after animation
     }));
-
-    setTimeout(() => startNewRound(), 1000);
-  };
+    startNewRound();
+  }, 1000);
+};
 
       // Show dice removal animation
       setTimeout(() => {
