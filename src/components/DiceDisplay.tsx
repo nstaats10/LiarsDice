@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 interface DiceDisplayProps {
   dice: number[];
   isHidden: boolean;
+  diceToRemove?: number; // Add this prop
+  onDiceRemoved?: (newDice: number[]) => void; // Add this prop
 }
 
 const DiceDisplay: React.FC<DiceDisplayProps> = ({ dice, isHidden }) => {
