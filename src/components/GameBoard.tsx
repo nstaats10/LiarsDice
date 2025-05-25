@@ -255,18 +255,28 @@ const GameBoard: React.FC = () => {
     initGame();
   }, []);
 
-  return (
+   return (
     <div className="flex flex-col lg:flex-row gap-4 justify-center">
       <div className="game-panel lg:w-3/4">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="w-full md:w-1/2">
             <h2 className="text-2xl text-[#5d4037] font-bold">Your Dice</h2>
-            <DiceDisplay dice={gameState.playerDice} isHidden={false} />
+            <DiceDisplay 
+              dice={gameState.playerDice} 
+              isHidden={false}
+              diceToRemove={gameState.lastBidder === 'player' ? 0 : undefined}
+              onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, playerDice: newDice }))}
+            />
           </div>
           
           <div className="w-full md:w-1/2">
             <h2 className="text-2xl text-[#5d4037] font-bold">AI's Dice</h2>
-            <DiceDisplay dice={gameState.aiDice} isHidden={true} />
+            <DiceDisplay 
+              dice={gameState.aiDice} 
+              isHidden={true}
+              diceToRemove={gameState.lastBidder === 'ai' ? 0 : undefined}
+              onDiceRemoved={(newDice) => setGameState(prev => ({ ...prev, aiDice: newDice }))}
+            />
           </div>
         </div>
         
