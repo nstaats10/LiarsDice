@@ -30,10 +30,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare deploy folder
+      - name: Prepare deploy folder using tar
         run: |
+          tar -cf artifact.tar --dereference -C dist .
           mkdir publish
-          cp -r dist/* publish/
+          tar -xf artifact.tar -C publish
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -43,5 +44,6 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
 
 
