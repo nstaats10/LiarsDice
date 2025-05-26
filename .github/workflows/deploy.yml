@@ -12,6 +12,8 @@ jobs:
       pages: write
       id-token: write
       contents: read
+    environment:                 # Add this block to define the environment
+      name: github-pages
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,3 +38,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
