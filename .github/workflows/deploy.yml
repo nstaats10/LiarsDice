@@ -34,8 +34,21 @@ jobs:
         run: |
           mkdir publish
           rsync -aL dist/ publish/
-          # Optionally check for symlinks
+          # Debug: List any symlinks that may remain
+          echo "Checking for symlinks before fix:"
           find publish -type l -ls || true
+
+      - name: Fix symlinks
+        run: |
+          echo "Fixing symlinks in publish folder..."
+          # For every symlink found in publish, replace it with its file content.
+          find publish -type l -exec sh -c 'cat "$0" > "${0}.resolved" && mv "${0}.resolved" "$0"' {} \;
+          echo "Verifying no symlinks remain:"
+          if find publish -type l | read; then
+            echo "Symlinks still exist!" && exit 1;
+          else
+            echo "All symlinks fixed."
+          fi
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -45,6 +58,3 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-
-
-
