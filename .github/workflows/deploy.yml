@@ -30,11 +30,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Prepare deploy folder using tar
+      - name: Prepare deploy folder using rsync
         run: |
-          tar -cf artifact.tar --dereference -C dist .
           mkdir publish
-          tar -xf artifact.tar -C publish
+          rsync -aL dist/ publish/
+          # Optionally check for symlinks
+          find publish -type l -ls || true
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
