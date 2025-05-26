@@ -12,7 +12,7 @@ jobs:
       pages: write
       id-token: write
       contents: read
-    environment:                 # Add this block to define the environment
+    environment:
       name: github-pages
     steps:
       - name: Checkout code
@@ -30,12 +30,18 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Prepare deploy folder
+        run: |
+          mkdir publish
+          cp -r dist/* publish/
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: ./dist
+          path: ./publish
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
+
 
